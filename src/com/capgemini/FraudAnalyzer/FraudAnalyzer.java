@@ -44,28 +44,29 @@ public class FraudAnalyzer {
 			for(int j=0; j<daysOfTransfers.size(); j++){
 				counter = users.get(i).countTransferPerDay(daysOfTransfers.get(j));
 				sum = users.get(i).countAmountTransferPerDay(daysOfTransfers.get(j));
+				List<Transfer> listOfTransferaDay = users.get(i).listOfTransferaDay(daysOfTransfers.get(j));
 				if (counter>5){
-					susTransfers.addAll(users.get(i).listOfTransferaDay(daysOfTransfers.get(j)));
-					users.get(i).listOfTransferaDay(daysOfTransfers.get(j)).removeAll(susTransfers);
+					susTransfers.addAll(listOfTransferaDay);
+					listOfTransferaDay.removeAll(susTransfers);
 				}else if (counter>3 && sum>5000){
-					susTransfers.addAll(users.get(i).listOfTransferaDay(daysOfTransfers.get(j)));
-					users.get(i).listOfTransferaDay(daysOfTransfers.get(j)).removeAll(susTransfers);
+					susTransfers.addAll(listOfTransferaDay);
+					listOfTransferaDay.removeAll(susTransfers);
 				}else if (counter>2 && sum>10000){
-					susTransfers.addAll(users.get(i).listOfTransferaDay(daysOfTransfers.get(j)));
-					users.get(i).listOfTransferaDay(daysOfTransfers.get(j)).removeAll(susTransfers);
+					susTransfers.addAll(listOfTransferaDay);
+					listOfTransferaDay.removeAll(susTransfers);
 				}			
-				for (int k=0;k<users.get(i).listOfTransferaDay(daysOfTransfers.get(j)).size();k++){
+				for (int k=0;k<listOfTransferaDay.size();k++){
 					counter2=0;
-					for (int l=k;l<users.get(i).listOfTransferaDay(daysOfTransfers.get(j)).size();l++){
-					if(users.get(i).listOfTransferaDay(daysOfTransfers.get(j)).get(k).GetToID()==
-							users.get(i).listOfTransferaDay(daysOfTransfers.get(j)).get(l).GetToID()){
+					for (int l=k;l<listOfTransferaDay.size();l++){
+					if(listOfTransferaDay.get(k).GetToID()==
+							listOfTransferaDay.get(l).GetToID()){
 							counter2++;
 						}
 					}
 				}
 				if(counter2>4){
-					susTransfers.addAll(users.get(i).listOfTransferaDay(daysOfTransfers.get(j)));
-					users.get(i).listOfTransferaDay(daysOfTransfers.get(j)).removeAll(susTransfers);
+					susTransfers.addAll(listOfTransferaDay);
+					listOfTransferaDay.removeAll(susTransfers);
 				}
 			}
 	}
@@ -79,6 +80,7 @@ public class FraudAnalyzer {
 		createUserHistory(inputTransfers);
 		//przypadek 1
 		susTransfers = UserIDCheck.SUSUser(inputTransfers);
+		inputTransfers.removeAll(susTransfers);
 		//przypadek 2, 3, 4, 5
 		susTransfers2 = checkNumberAndAmount();
 		susTransfers.addAll(susTransfers2);
